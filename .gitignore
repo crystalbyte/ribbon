@@ -1,3 +1,13 @@
+# Visual Studio binary folders
+
+obj
+bin
+
+# Visual Studio user properties
+*.suo
+*.user
+
+
 # Windows image file caches
 Thumbs.db
 ehthumbs.db
