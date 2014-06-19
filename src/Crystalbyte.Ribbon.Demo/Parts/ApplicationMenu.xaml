@@ -1,0 +1,24 @@
+﻿<ui:ApplicationMenu x:Class="Crystalbyte.Ribbon.Demo.Parts.ApplicationMenu"
+                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    xmlns:ui="clr-namespace:Crystalbyte.UI;assembly=Crystalbyte.Ribbon"
+                    d:DesignHeight="300"
+                    d:DesignWidth="300"
+                    mc:Ignorable="d">
+    <ui:ApplicationMenuItem Header="New">
+        <TextBlock>Content for new</TextBlock>
+    </ui:ApplicationMenuItem>
+    <ui:ApplicationMenuItem Header="Save As">
+        <TextBlock>Content for save as</TextBlock>
+    </ui:ApplicationMenuItem>
+    <ui:ApplicationMenuItem Header="Information">
+        <TextBlock>Content for information</TextBlock>
+    </ui:ApplicationMenuItem>
+    <ui:ApplicationMenuItem Header="Print">
+        <TextBlock>Content for print</TextBlock>
+    </ui:ApplicationMenuItem>
+    <ui:ApplicationMenuSeparator />
+    <ui:ApplicationMenuButton Command="Close" Content="Close" />
+</ui:ApplicationMenu>

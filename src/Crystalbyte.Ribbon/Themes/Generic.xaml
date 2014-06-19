@@ -1,0 +1,17 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Crystalbyte.Ribbon;component/UI/Resources.xaml" />
+        <ResourceDictionary Source="/Crystalbyte.Ribbon;component/UI/ApplicationMenu.xaml" />
+        <ResourceDictionary Source="/Crystalbyte.Ribbon;component/UI/ApplicationMenuItem.xaml" />
+        <ResourceDictionary Source="/Crystalbyte.Ribbon;component/UI/ApplicationMenuSeparator.xaml" />
+        <ResourceDictionary Source="/Crystalbyte.Ribbon;component/UI/ApplicationMenuButton.xaml" />
+        <ResourceDictionary Source="/Crystalbyte.Ribbon;component/UI/RibbonGroup.xaml" />
+        <ResourceDictionary Source="/Crystalbyte.Ribbon;component/UI/RibbonPage.xaml" />
+        <ResourceDictionary Source="/Crystalbyte.Ribbon;component/UI/RibbonButton.xaml" />
+        <ResourceDictionary Source="/Crystalbyte.Ribbon;component/UI/Ribbon.xaml" />
+        <ResourceDictionary Source="/Crystalbyte.Ribbon;component/UI/RibbonTab.xaml" />
+        <ResourceDictionary Source="/Crystalbyte.Ribbon;component/UI/QuickAccessBarItem.xaml" />
+        <ResourceDictionary Source="/Crystalbyte.Ribbon;component/UI/QuickAccessBar.xaml" />
+        <ResourceDictionary Source="/Crystalbyte.Ribbon;component/UI/RibbonWindow.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>

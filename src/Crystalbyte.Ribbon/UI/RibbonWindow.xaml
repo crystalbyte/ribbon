@@ -1,0 +1,619 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:converters="clr-namespace:Crystalbyte.Converters"
+                    xmlns:ui="clr-namespace:Crystalbyte.UI">
+
+    <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    <converters:RibbonStateToVisibilityConverter x:Key="RibbonStateToVisibilityConverter" />
+    <converters:DoubleMultiplier x:Key="DoubleMultiplier" />
+
+    <Style x:Key="RibbonOptionTitleStyle" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly=ui:RibbonWindow, ResourceId=LightTextBrush}}" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Margin" Value="0,3,0,3" />
+    </Style>
+
+    <Style x:Key="RibbonOptionDescriptionStyle" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly=ui:RibbonWindow, ResourceId=LightTextBrush}}" />
+        <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+    </Style>
+
+    <Style x:Key="BackButtonStyle" TargetType="ButtonBase">
+        <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ButtonBase">
+                    <Grid>
+                        <Ellipse Width="34"
+                                 Height="34"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center" />
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="ui:RibbonWindow">
+        <Setter Property="AccentBrush" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly=ui:RibbonWindow, ResourceId=WindowAccentBrush}}" />
+        <Setter Property="AllowsTransparency" Value="True" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="WindowStyle" Value="None" />
+        <Setter Property="ResizeMode" Value="CanResizeWithGrip" />
+        <Setter Property="BorderBrush" Value="{Binding AccentBrush, RelativeSource={RelativeSource Self}}" />
+        <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly=ui:RibbonWindow, ResourceId=WindowBackgroundBrush}}" />
+        <Setter Property="Foreground" Value="WhiteSmoke" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="WindowChrome.WindowChrome">
+            <Setter.Value>
+                <WindowChrome CaptionHeight="24"
+                              GlassFrameThickness="-1"
+                              NonClientFrameEdges="None"
+                              ResizeBorderThickness="0" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="StatusBarContainerStyle">
+            <Setter.Value>
+                <Style BasedOn="{StaticResource {x:Type StatusBarItem}}" TargetType="StatusBarItem">
+                    <Setter Property="Margin" Value="0,1,0,1" />
+                </Style>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="StatusBarItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <Grid />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+        <!--  Windows Shell Integration http://www.seritools.de/programmierung/wpf/wpf-fensterrahmen-anpassen-mit-dem-windowchrome/post503.html  -->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ui:RibbonWindow">
+                    <Border Background="Transparent" Padding="{TemplateBinding FramePadding}">
+                        <Border x:Name="WindowBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <!--  window command bar  -->
+                                    <RowDefinition Height="Auto" />
+                                    <!--  window ribbon  -->
+                                    <RowDefinition Height="Auto" />
+                                    <!--  window content  -->
+                                    <RowDefinition Height="*" />
+                                    <!--  status bar  -->
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid x:Name="CommandBar"
+                                      Grid.Row="0"
+                                      Grid.Column="0"
+                                      HorizontalAlignment="Stretch"
+                                      Panel.ZIndex="50"
+                                      Visibility="{Binding IsAppMenuOpened,
+                                                           RelativeSource={RelativeSource FindAncestor,
+                                                                                          AncestorLevel=1,
+                                                                                          AncestorType=ui:RibbonWindow},
+                                                           Converter={StaticResource BooleanToVisibilityConverter},
+                                                           ConverterParameter=!}">
+                                    <Grid.ColumnDefinitions>
+                                        <!--  window icon  -->
+                                        <ColumnDefinition Width="Auto" />
+                                        <!--  window title  -->
+                                        <ColumnDefinition Width="Auto" />
+                                        <!--  empty command space  -->
+                                        <ColumnDefinition Width="*" />
+                                        <!--  help button  -->
+                                        <ColumnDefinition Width="Auto" />
+                                        <!--  ribbon options button  -->
+                                        <ColumnDefinition Width="Auto" />
+                                        <!--  minimize button  -->
+                                        <ColumnDefinition Width="Auto" />
+                                        <!--  restore down button  -->
+                                        <ColumnDefinition Width="Auto" />
+                                        <!--  maximize down button  -->
+                                        <ColumnDefinition Width="Auto" />
+                                        <!--  close button  -->
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Image Grid.Column="0"
+                                           Height="20"
+                                           Margin="8"
+                                           RenderOptions.BitmapScalingMode="Fant"
+                                           Source="{TemplateBinding Icon}"
+                                           Stretch="Uniform"
+                                           Visibility="{Binding RibbonState,
+                                                                RelativeSource={RelativeSource FindAncestor,
+                                                                                               AncestorType=ui:RibbonWindow,
+                                                                                               AncestorLevel=1},
+                                                                Converter={StaticResource RibbonStateToVisibilityConverter},
+                                                                ConverterParameter=Tabs|TabsAndCommands}" />
+                                    <Button Grid.Column="0"
+                                            Grid.ColumnSpan="3"
+                                            Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly=ui:RibbonWindow,
+                                                                                          ResourceId=BlendInRibbonButtonStyle}}"
+                                            Visibility="{Binding RibbonState,
+                                                                 RelativeSource={RelativeSource TemplatedParent},
+                                                                 Converter={StaticResource RibbonStateToVisibilityConverter},
+                                                                 ConverterParameter=Hidden}" />
+                                    <TextBlock Grid.Column="1"
+                                               Margin="0,-3,0,0"
+                                               VerticalAlignment="Center"
+                                               Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly=ui:RibbonWindow,
+                                                                                             ResourceId=WindowTitleStyle}}"
+                                               Text="{TemplateBinding Title}"
+                                               Visibility="{Binding RibbonState,
+                                                                    RelativeSource={RelativeSource FindAncestor,
+                                                                                                   AncestorType=ui:RibbonWindow,
+                                                                                                   AncestorLevel=1},
+                                                                    Converter={StaticResource RibbonStateToVisibilityConverter},
+                                                                    ConverterParameter=Tabs|TabsAndCommands}" />
+                                    <Border Grid.Column="2"
+                                            Margin="8,0,0,0"
+                                            VerticalAlignment="Center"
+                                            BorderBrush="{DynamicResource {ComponentResourceKey TypeInTargetAssembly=ui:RibbonWindow,
+                                                                                                ResourceId=RibbonBorderBrush}}"
+                                            BorderThickness="1,0,0,0"
+                                            Padding="8,0,0,0"
+                                            Visibility="{Binding RibbonState,
+                                                                 RelativeSource={RelativeSource FindAncestor,
+                                                                                                AncestorType=ui:RibbonWindow,
+                                                                                                AncestorLevel=1},
+                                                                 Converter={StaticResource RibbonStateToVisibilityConverter},
+                                                                 ConverterParameter=Tabs|TabsAndCommands}">
+                                        <ui:QuickAccessBar VerticalAlignment="Center"
+                                                           ItemsSource="{TemplateBinding QuickAccessItems}"
+                                                           Visibility="{Binding IsAppMenuOpened,
+                                                                                RelativeSource={RelativeSource TemplatedParent},
+                                                                                Converter={StaticResource BooleanToVisibilityConverter},
+                                                                                ConverterParameter=!}" />
+                                    </Border>
+                                    <Button Grid.Column="3"
+                                            Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly=ui:RibbonWindow,
+                                                                                          ResourceId=HelpButtonStyle}}"
+                                            Visibility="{Binding RibbonState,
+                                                                 RelativeSource={RelativeSource FindAncestor,
+                                                                                                AncestorType=ui:RibbonWindow,
+                                                                                                AncestorLevel=1},
+                                                                 Converter={StaticResource RibbonStateToVisibilityConverter},
+                                                                 ConverterParameter=Tabs|TabsAndCommands}" />
+                                    <Button Grid.Column="4"
+                                            Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly=ui:RibbonWindow,
+                                                                                          ResourceId=RibbonOptionsButtonStyle}}"
+                                            Visibility="{Binding IsAppMenuOpened,
+                                                                 RelativeSource={RelativeSource TemplatedParent},
+                                                                 Converter={StaticResource BooleanToVisibilityConverter},
+                                                                 ConverterParameter=!}" />
+                                    <Button Grid.Column="5"
+                                            Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly=ui:RibbonWindow,
+                                                                                          ResourceId=MinimizeButtonStyle}}"
+                                            Visibility="{Binding RibbonState,
+                                                                 RelativeSource={RelativeSource TemplatedParent},
+                                                                 Converter={StaticResource RibbonStateToVisibilityConverter},
+                                                                 ConverterParameter=Tabs|TabsAndCommands}" />
+                                    <Border Grid.Column="6"
+                                            Background="Transparent"
+                                            BorderThickness="0"
+                                            Visibility="{Binding RibbonState,
+                                                                 RelativeSource={RelativeSource TemplatedParent},
+                                                                 Converter={StaticResource RibbonStateToVisibilityConverter},
+                                                                 ConverterParameter=Tabs|TabsAndCommands}">
+                                        <Button Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly=ui:RibbonWindow, ResourceId=MaximizeButtonStyle}}" Visibility="{Binding IsNormalized, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                    </Border>
+                                    <Border Grid.Column="7"
+                                            Background="Transparent"
+                                            BorderThickness="0"
+                                            Visibility="{Binding RibbonState,
+                                                                 RelativeSource={RelativeSource TemplatedParent},
+                                                                 Converter={StaticResource RibbonStateToVisibilityConverter},
+                                                                 ConverterParameter=Tabs|TabsAndCommands}">
+                                        <Button Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly=ui:RibbonWindow, ResourceId=RestoreDownButtonStyle}}" Visibility="{Binding IsMaximized, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                    </Border>
+                                    <Button Grid.Column="8" Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly=ui:RibbonWindow, ResourceId=CloseButtonStyle}}" />
+                                </Grid>
+                                <Border x:Name="PART_RibbonHost"
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        VerticalAlignment="Top"
+                                        Panel.ZIndex="25">
+                                    <ContentPresenter Content="{TemplateBinding Ribbon}" Visibility="{Binding IsAppMenuOpened, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType=ui:RibbonWindow}, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=!}" />
+                                    <Border.RenderTransform>
+                                        <TranslateTransform x:Name="RibbonTranslateTransform" />
+                                    </Border.RenderTransform>
+                                    <Border.Resources>
+                                        <Storyboard x:Key="RibbonBlendInStoryboard">
+                                            <DoubleAnimation BeginTime="0:0:0"
+                                                             Duration="0:0:0.2"
+                                                             From="{Binding ActualHeight,
+                                                                            ElementName=PART_RibbonHost,
+                                                                            Converter={StaticResource DoubleMultiplier},
+                                                                            ConverterParameter=-1}"
+                                                             Storyboard.TargetName="RibbonTranslateTransform"
+                                                             Storyboard.TargetProperty="Y"
+                                                             To="0">
+                                                <DoubleAnimation.EasingFunction>
+                                                    <CubicEase EasingMode="EaseOut" />
+                                                </DoubleAnimation.EasingFunction>
+                                            </DoubleAnimation>
+                                        </Storyboard>
+                                    </Border.Resources>
+                                </Border>
+                                <ContentPresenter Grid.Row="2" Grid.Column="0" />
+                                <Popup x:Name="PART_RibbonOptionsPopup"
+                                       Grid.Row="0"
+                                       Grid.Column="0"
+                                       Placement="Bottom"
+                                       StaysOpen="False">
+                                    <Border x:Name="PopupContent"
+                                            Background="{Binding Background}"
+                                            BorderBrush="{Binding Background}"
+                                            BorderThickness="1">
+                                        <ListView x:Name="PART_RibbonOptionsList"
+                                                  Background="Transparent"
+                                                  BorderThickness="0"
+                                                  Foreground="{Binding Foreground}"
+                                                  SelectionMode="Single">
+                                            <ListView.ItemContainerStyle>
+                                                <Style TargetType="ListViewItem">
+                                                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="ListViewItem">
+                                                                <Border x:Name="Border"
+                                                                        Margin="1"
+                                                                        Background="{Binding Background,
+                                                                                             ElementName=PopupContent}">
+                                                                    <Grid>
+                                                                        <Rectangle Fill="{Binding Background,
+                                                                                                  ElementName=PopupContent}"
+                                                                                   Opacity=".8"
+                                                                                   StrokeThickness="0" />
+                                                                        <ContentPresenter />
+                                                                    </Grid>
+                                                                </Border>
+                                                                <ControlTemplate.Triggers>
+                                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                                        <Setter TargetName="Border" Property="Background" Value="{Binding BorderBrush, ElementName=PopupContent}" />
+                                                                    </Trigger>
+                                                                </ControlTemplate.Triggers>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </ListView.ItemContainerStyle>
+                                            <ListView.ItemTemplate>
+                                                <DataTemplate DataType="ui:RibbonOption">
+                                                    <Grid>
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="Auto" />
+                                                            <RowDefinition Height="*" />
+                                                        </Grid.RowDefinitions>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="Auto" />
+                                                            <ColumnDefinition Width="280" />
+                                                        </Grid.ColumnDefinitions>
+                                                        <Border Grid.Row="0"
+                                                                Grid.RowSpan="2"
+                                                                Grid.Column="0"
+                                                                Margin="3,3,5,3"
+                                                                VerticalAlignment="Top">
+                                                            <Grid>
+                                                                <Image Width="30"
+                                                                       Margin="3"
+                                                                       HorizontalAlignment="Center"
+                                                                       VerticalAlignment="Center"
+                                                                       Source="{Binding ImageSource,
+                                                                                        IsAsync=True,
+                                                                                        Mode=OneTime}"
+                                                                       Stretch="Uniform" />
+                                                                <Rectangle x:Name="SelectionOverlay"
+                                                                           HorizontalAlignment="Stretch"
+                                                                           VerticalAlignment="Stretch"
+                                                                           Fill="{DynamicResource {ComponentResourceKey TypeInTargetAssembly=ui:RibbonWindow,
+                                                                                                                        ResourceId=WindowAccentBrush}}"
+                                                                           Opacity=".2"
+                                                                           StrokeThickness="0"
+                                                                           Visibility="{Binding IsSelected,
+                                                                                                Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                                                <Rectangle x:Name="SelectionOverlayBorder"
+                                                                           HorizontalAlignment="Stretch"
+                                                                           VerticalAlignment="Stretch"
+                                                                           Fill="Transparent"
+                                                                           Stroke="{DynamicResource {ComponentResourceKey TypeInTargetAssembly=ui:RibbonWindow,
+                                                                                                                          ResourceId=WindowAccentBrush}}"
+                                                                           StrokeThickness="1"
+                                                                           Visibility="{Binding IsSelected,
+                                                                                                Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                                            </Grid>
+                                                        </Border>
+                                                        <TextBlock Grid.Row="0"
+                                                                   Grid.Column="1"
+                                                                   Style="{StaticResource RibbonOptionTitleStyle}"
+                                                                   Text="{Binding Title,
+                                                                                  Mode=OneTime}" />
+                                                        <TextBlock Grid.Row="1"
+                                                                   Grid.Column="1"
+                                                                   Style="{StaticResource RibbonOptionDescriptionStyle}"
+                                                                   Text="{Binding Description,
+                                                                                  Mode=OneTime}" />
+                                                    </Grid>
+                                                    <DataTemplate.Triggers>
+                                                        <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                                            <Setter TargetName="SelectionOverlay" Property="Visibility" Value="Visible" />
+                                                            <Setter TargetName="SelectionOverlayBorder" Property="Visibility" Value="Visible" />
+                                                        </DataTrigger>
+                                                    </DataTemplate.Triggers>
+                                                </DataTemplate>
+                                            </ListView.ItemTemplate>
+                                        </ListView>
+                                    </Border>
+                                </Popup>
+
+                                <StatusBar x:Name="PART_StatusBar"
+                                           Grid.Row="3"
+                                           Grid.Column="0"
+                                           Margin="-1,0,-1,-1"
+                                           Panel.ZIndex="25"
+                                           Background="{Binding AccentBrush,
+                                                                RelativeSource={RelativeSource FindAncestor,
+                                                                                               AncestorType=ui:RibbonWindow,
+                                                                                               AncestorLevel=1}}"
+                                           Foreground="{Binding Foreground,
+                                                                RelativeSource={RelativeSource FindAncestor,
+                                                                                               AncestorType=ui:RibbonWindow,
+                                                                                               AncestorLevel=1}}"
+                                           ItemContainerStyle="{TemplateBinding StatusBarContainerStyle}"
+                                           ItemTemplate="{TemplateBinding StatusBarItemTemplate}"
+                                           ItemsPanel="{TemplateBinding StatusBarItemsPanel}"
+                                           ItemsSource="{TemplateBinding StatusBarItemsSource}"
+                                           SnapsToDevicePixels="True">
+                                    <StatusBar.RenderTransform>
+                                        <TranslateTransform x:Name="StatusBarTranslateTransform" />
+                                    </StatusBar.RenderTransform>
+                                    <StatusBar.Resources>
+                                        <Storyboard x:Key="StatusBarBlendInStoryboard">
+                                            <DoubleAnimation BeginTime="0:0:0"
+                                                             Duration="0:0:0.2"
+                                                             From="{Binding ActualHeight,
+                                                                            ElementName=PART_StatusBar}"
+                                                             Storyboard.TargetName="StatusBarTranslateTransform"
+                                                             Storyboard.TargetProperty="Y"
+                                                             To="0">
+                                                <DoubleAnimation.EasingFunction>
+                                                    <CubicEase EasingMode="EaseOut" />
+                                                </DoubleAnimation.EasingFunction>
+                                            </DoubleAnimation>
+                                        </Storyboard>
+                                    </StatusBar.Resources>
+                                </StatusBar>
+
+                                <Grid x:Name="PART_ApplicationMenuHost"
+                                      Grid.Row="0"
+                                      Grid.RowSpan="4"
+                                      Grid.Column="0"
+                                      Panel.ZIndex="150"
+                                      Background="{x:Null}"
+                                      Opacity="0">
+                                    <Grid.RenderTransform>
+                                        <TranslateTransform x:Name="ApplicationMenuTranslateTransform" />
+                                    </Grid.RenderTransform>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="60" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="{Binding ActualHeight, ElementName=PART_StatusBar}" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <DockPanel x:Name="ApplicationMenuHeaderColumn"
+                                               Grid.Row="0"
+                                               Grid.RowSpan="3"
+                                               Grid.Column="0"
+                                               Margin="0,-1,0,-1"
+                                               Background="{Binding AccentBrush,
+                                                                    RelativeSource={RelativeSource FindAncestor,
+                                                                                                   AncestorType=ui:RibbonWindow,
+                                                                                                   AncestorLevel=1}}"
+                                               IsHitTestVisible="{Binding IsAppMenuOpened,
+                                                                          RelativeSource={RelativeSource TemplatedParent}}"
+                                               LastChildFill="True">
+                                        <Button Margin="19,18,0,14"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Top"
+                                                Command="{x:Static ui:RibbonCommands.CloseAppMenu}"
+                                                DockPanel.Dock="Top"
+                                                Focusable="False"
+                                                IsCancel="True"
+                                                SnapsToDevicePixels="True">
+                                            <Button.Template>
+                                                <ControlTemplate TargetType="ButtonBase">
+                                                    <Grid>
+                                                        <Ellipse Width="34"
+                                                                 Height="34"
+                                                                 HorizontalAlignment="Stretch"
+                                                                 VerticalAlignment="Stretch"
+                                                                 Fill="Transparent"
+                                                                 Stroke="WhiteSmoke"
+                                                                 StrokeThickness="1.8" />
+                                                        <Image Height="32"
+                                                               HorizontalAlignment="Center"
+                                                               VerticalAlignment="Center"
+                                                               RenderOptions.BitmapScalingMode="Fant"
+                                                               SnapsToDevicePixels="True"
+                                                               Source="/Crystalbyte.Ribbon;component/Assets/back.png"
+                                                               Stretch="Uniform" />
+                                                        <Rectangle x:Name="SelectionOverlay"
+                                                                   HorizontalAlignment="Stretch"
+                                                                   VerticalAlignment="Stretch"
+                                                                   Fill="{Binding AccentBrush,
+                                                                                  RelativeSource={RelativeSource FindAncestor,
+                                                                                                                 AncestorType=ui:RibbonWindow,
+                                                                                                                 AncestorLevel=1}}"
+                                                                   Opacity=".2"
+                                                                   StrokeThickness="0"
+                                                                   Visibility="Collapsed" />
+                                                    </Grid>
+                                                    <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter TargetName="SelectionOverlay" Property="Visibility" Value="Visible" />
+                                                        </Trigger>
+                                                    </ControlTemplate.Triggers>
+                                                </ControlTemplate>
+                                            </Button.Template>
+                                        </Button>
+                                        <ContentPresenter Content="{TemplateBinding ApplicationMenu}" />
+                                    </DockPanel>
+                                    <Border Grid.Row="1"
+                                            Grid.Column="1"
+                                            Background="{Binding Background,
+                                                                 RelativeSource={RelativeSource FindAncestor,
+                                                                                                AncestorLevel=1,
+                                                                                                AncestorType=ui:RibbonWindow}}"
+                                            IsHitTestVisible="{Binding IsAppMenuOpened,
+                                                                       RelativeSource={RelativeSource TemplatedParent}}">
+                                        <Border Margin="32,0,32,0">
+                                            <DockPanel DataContext="{Binding ApplicationMenu, RelativeSource={RelativeSource TemplatedParent}}" LastChildFill="True">
+                                                <ContentPresenter x:Name="SelectedHeaderPresenter"
+                                                                  Content="{Binding SelectedHeader}"
+                                                                  DockPanel.Dock="Top">
+                                                    <ContentPresenter.ContentTemplate>
+                                                        <DataTemplate>
+                                                            <TextBlock FontSize="{DynamicResource {ComponentResourceKey TypeInTargetAssembly=ui:RibbonWindow,
+                                                                                                                        ResourceId=WindowExtraExtraLargeFontSize}}"
+                                                                       FontWeight="Light"
+                                                                       RenderOptions.ClearTypeHint="Enabled"
+                                                                       Text="{Binding}" />
+                                                        </DataTemplate>
+                                                    </ContentPresenter.ContentTemplate>
+                                                    <ContentPresenter.RenderTransform>
+                                                        <TranslateTransform x:Name="SelectedHeaderPresenterTransform" />
+                                                    </ContentPresenter.RenderTransform>
+                                                </ContentPresenter>
+                                                <ContentPresenter x:Name="SelectedContentPresenter"
+                                                                  Margin="0,18,0,0"
+                                                                  HorizontalAlignment="Stretch"
+                                                                  VerticalAlignment="Stretch"
+                                                                  Content="{Binding SelectedContent}"
+                                                                  ContentTemplate="{Binding SelectedContentTemplate}">
+                                                    <ContentPresenter.RenderTransform>
+                                                        <TranslateTransform x:Name="SelectedContentPresenterTransform" />
+                                                    </ContentPresenter.RenderTransform>
+                                                </ContentPresenter>
+                                            </DockPanel>
+                                        </Border>
+
+                                    </Border>
+                                    <Grid.Resources>
+                                        <Storyboard x:Key="OpenApplicationMenuStoryboard">
+                                            <DoubleAnimation BeginTime="0:0:0"
+                                                             Duration="0:0:0.2"
+                                                             From="0.0"
+                                                             Storyboard.TargetName="PART_ApplicationMenuHost"
+                                                             Storyboard.TargetProperty="Opacity"
+                                                             To="1.0" />
+                                            <DoubleAnimation BeginTime="0:0:0"
+                                                             Duration="0:0:0.2"
+                                                             From="{Binding ActualWidth,
+                                                                            ElementName=ApplicationMenuHeaderColumn,
+                                                                            Converter={StaticResource DoubleMultiplier},
+                                                                            ConverterParameter=-1}"
+                                                             Storyboard.TargetName="ApplicationMenuTranslateTransform"
+                                                             Storyboard.TargetProperty="X"
+                                                             To="0">
+                                                <DoubleAnimation.EasingFunction>
+                                                    <CubicEase EasingMode="EaseOut" />
+                                                </DoubleAnimation.EasingFunction>
+                                            </DoubleAnimation>
+                                        </Storyboard>
+                                        <Storyboard x:Key="CloseApplicationMenuStoryboard">
+                                            <DoubleAnimation BeginTime="0:0:0"
+                                                             Duration="0:0:0.2"
+                                                             From="1.0"
+                                                             Storyboard.TargetName="PART_ApplicationMenuHost"
+                                                             Storyboard.TargetProperty="Opacity"
+                                                             To="0.0" />
+                                            <DoubleAnimation BeginTime="0:0:0"
+                                                             Duration="0:0:0.2"
+                                                             From="0"
+                                                             Storyboard.TargetName="ApplicationMenuTranslateTransform"
+                                                             Storyboard.TargetProperty="X"
+                                                             To="{Binding ActualWidth,
+                                                                          ElementName=ApplicationMenuHeaderColumn,
+                                                                          Converter={StaticResource DoubleMultiplier},
+                                                                          ConverterParameter=-1}">
+                                                <DoubleAnimation.EasingFunction>
+                                                    <CubicEase EasingMode="EaseOut" />
+                                                </DoubleAnimation.EasingFunction>
+                                            </DoubleAnimation>
+                                        </Storyboard>
+                                        <Storyboard x:Key="ExchangeAppMenuContentStoryboard">
+                                            <DoubleAnimation BeginTime="0:0:0"
+                                                             Duration="0:0:0.4"
+                                                             From="10"
+                                                             Storyboard.TargetName="SelectedHeaderPresenterTransform"
+                                                             Storyboard.TargetProperty="X"
+                                                             To="0">
+                                                <DoubleAnimation.EasingFunction>
+                                                    <CubicEase EasingMode="EaseOut" />
+                                                </DoubleAnimation.EasingFunction>
+                                            </DoubleAnimation>
+                                            <DoubleAnimation BeginTime="0:0:0"
+                                                             Duration="0:0:0.4"
+                                                             From="-10"
+                                                             Storyboard.TargetName="SelectedContentPresenterTransform"
+                                                             Storyboard.TargetProperty="X"
+                                                             To="0">
+                                                <DoubleAnimation.EasingFunction>
+                                                    <CubicEase EasingMode="EaseOut" />
+                                                </DoubleAnimation.EasingFunction>
+                                            </DoubleAnimation>
+                                            <DoubleAnimation BeginTime="0:0:0"
+                                                             Duration="0:0:0.4"
+                                                             From="0"
+                                                             Storyboard.TargetName="SelectedHeaderPresenter"
+                                                             Storyboard.TargetProperty="Opacity"
+                                                             To="1.0">
+                                                <DoubleAnimation.EasingFunction>
+                                                    <CubicEase EasingMode="EaseOut" />
+                                                </DoubleAnimation.EasingFunction>
+                                            </DoubleAnimation>
+                                            <DoubleAnimation BeginTime="0:0:0"
+                                                             Duration="0:0:0.4"
+                                                             From="0"
+                                                             Storyboard.TargetName="SelectedContentPresenter"
+                                                             Storyboard.TargetProperty="Opacity"
+                                                             To="1.0">
+                                                <DoubleAnimation.EasingFunction>
+                                                    <CubicEase EasingMode="EaseOut" />
+                                                </DoubleAnimation.EasingFunction>
+                                            </DoubleAnimation>
+                                        </Storyboard>
+                                    </Grid.Resources>
+                                </Grid>
+
+                                <Border Grid.Row="3"
+                                        Grid.Column="0"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Bottom"
+                                        Panel.ZIndex="1000"
+                                        Visibility="{Binding IsAppMenuOpened,
+                                                             RelativeSource={RelativeSource TemplatedParent},
+                                                             Converter={StaticResource BooleanToVisibilityConverter},
+                                                             ConverterParameter=!}">
+                                    <ResizeGrip Visibility="{Binding IsNormalized, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToVisibilityConverter}}" WindowChrome.ResizeGripDirection="BottomRight" />
+                                </Border>
+
+                            </Grid>
+                        </Border>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

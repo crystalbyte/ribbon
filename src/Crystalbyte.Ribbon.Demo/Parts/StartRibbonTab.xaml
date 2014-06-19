@@ -1,0 +1,21 @@
+﻿<ui:RibbonTab x:Class="Crystalbyte.Ribbon.Demo.Parts.StartRibbonTab"
+              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+              xmlns:ui="clr-namespace:Crystalbyte.UI;assembly=Crystalbyte.Ribbon"
+              Header="Start"
+              d:DesignHeight="300"
+              d:DesignWidth="300"
+              mc:Ignorable="d">
+    <ui:RibbonPage>
+        <ui:RibbonGroup Header="Navigation">
+            <ui:RibbonButton Content="Back" ImageSource="../Assets/back.png" />
+            <ui:RibbonButton Content="Next" ImageSource="../Assets/next.png" />
+        </ui:RibbonGroup>
+        <ui:RibbonGroup Header="Communications">
+            <ui:RibbonButton Content="Download" ImageSource="../Assets/download.png" />
+            <ui:RibbonButton Content="Upload" ImageSource="../Assets/upload.png" />
+        </ui:RibbonGroup>
+    </ui:RibbonPage>
+</ui:RibbonTab>

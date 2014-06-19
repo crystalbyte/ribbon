@@ -1,0 +1,86 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:converters="clr-namespace:Crystalbyte.Converters"
+                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    xmlns:ui="clr-namespace:Crystalbyte.UI"
+                    mc:Ignorable="d">
+
+    <converters:NullToVisibleConverter x:Key="NullToVisibleConverter" />
+
+    <Style TargetType="ui:RibbonGroup">
+        <Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=ui:RibbonWindow, AncestorLevel=1}}" />
+        <Setter Property="RenderOptions.ClearTypeHint" Value="Enabled" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Padding" Value="3,3,0,0" />
+        <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly=ui:RibbonWindow, ResourceId=RibbonBorderBrush}}" />
+        <Setter Property="FontSize" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly=ui:RibbonWindow, ResourceId=WindowNormalFontSize}}" />
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ui:RibbonGroup">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Padding="{TemplateBinding Padding}">
+                        <Grid MinWidth="80"
+                              MinHeight="85"
+                              MaxHeight="85"
+                              ShowGridLines="False">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <ItemsPresenter Grid.Row="0"
+                                            Grid.Column="0"
+                                            Grid.ColumnSpan="2" />
+                            <ContentPresenter Grid.Row="1"
+                                              Grid.Column="0"
+                                              Grid.ColumnSpan="2"
+                                              HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              Content="{TemplateBinding Header}"
+                                              ContentTemplate="{TemplateBinding HeaderTemplate}" />
+                            <Button Grid.Row="1"
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Command="{TemplateBinding Command}"
+                                    CommandParameter="{TemplateBinding CommandParameters}"
+                                    Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly=ui:RibbonWindow,
+                                                                                  ResourceId=RibbonGroupButtonStyle}}"
+                                    Visibility="{Binding Command,
+                                                         RelativeSource={RelativeSource TemplatedParent},
+                                                         Mode=OneWay,
+                                                         Converter={StaticResource NullToVisibleConverter}}" />
+                            <Path Grid.Row="0"
+                                  Grid.RowSpan="2"
+                                  Grid.Column="2"
+                                  Width="1"
+                                  Height="84"
+                                  Margin="4,0,0,0"
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"
+                                  Data="M 0 0 L 0 83"
+                                  RenderOptions.EdgeMode="Aliased"
+                                  Stroke="{TemplateBinding BorderBrush}"
+                                  StrokeThickness="1" />
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

@@ -1,0 +1,47 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    xmlns:properties="clr-namespace:Crystalbyte.Properties"
+                    xmlns:ui="clr-namespace:Crystalbyte.UI"
+                    mc:Ignorable="d">
+    <Style TargetType="ui:QuickAccessBarItem">
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate DataType="ui:IQuickAccessConform">
+                    <Button Command="{Binding Command}"
+                            CommandParameter="{Binding CommandParameter}"
+                            Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly=ui:RibbonWindow,
+                                                                          ResourceId=QuickAccessButtonStyle}}">
+                        <Button.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Command="ui:RibbonCommands.RemoveQuickAccess"
+                                          CommandParameter="{Binding}"
+                                          CommandTarget="{Binding PlacementTarget,
+                                                                  RelativeSource={RelativeSource FindAncestor,
+                                                                                                 AncestorType={x:Type ContextMenu},
+                                                                                                 AncestorLevel=1}}"
+                                          Header="{x:Static properties:Resources.RemoveQuickAccessCommandName}" />
+                            </ContextMenu>
+                        </Button.ContextMenu>
+                        <Image RenderOptions.BitmapScalingMode="Fant"
+                               SnapsToDevicePixels="True"
+                               Source="{Binding QuickAccessImageSource}"
+                               Stretch="Uniform" />
+                    </Button>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ui:QuickAccessBarItem">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>
