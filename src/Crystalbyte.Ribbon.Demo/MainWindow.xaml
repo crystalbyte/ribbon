@@ -7,8 +7,11 @@
                  Title="Ribbon Controls for WPF"
                  Width="1280"
                  Height="768"
+                 MinWidth="640"
+                 MinHeight="400"
                  Foreground="WhiteSmoke"
-                 Icon="Assets/crystalbyte.cube.png">
+                 Icon="Assets/crystalbyte.cube.png"
+                 UseLayoutRounding="True">
 
     <ui:RibbonWindow.ApplicationMenu>
         <p:ApplicationMenu />
@@ -44,7 +47,6 @@
                                 </ControlTemplate>
                             </Button.Template>
                         </Button>
-
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
                 <ItemsControl.ItemsSource>

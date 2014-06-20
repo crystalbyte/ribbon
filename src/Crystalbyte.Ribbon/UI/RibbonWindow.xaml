@@ -243,20 +243,27 @@
                                         </Storyboard>
                                     </Border.Resources>
                                 </Border>
-                                <ContentPresenter Grid.Row="2" Grid.Column="0" />
+
+                                <ContentPresenter x:Name="PART_ContentPresenter"
+                                                  Grid.Row="2"
+                                                  Grid.Column="0" />
+
                                 <Popup x:Name="PART_RibbonOptionsPopup"
                                        Grid.Row="0"
                                        Grid.Column="0"
                                        Placement="Bottom"
                                        StaysOpen="False">
                                     <Border x:Name="PopupContent"
-                                            Background="{Binding Background}"
-                                            BorderBrush="{Binding Background}"
+                                            Background="{Binding Background,
+                                                                 RelativeSource={RelativeSource TemplatedParent}}"
+                                            BorderBrush="{Binding AccentBrush,
+                                                                  RelativeSource={RelativeSource TemplatedParent}}"
                                             BorderThickness="1">
                                         <ListView x:Name="PART_RibbonOptionsList"
                                                   Background="Transparent"
                                                   BorderThickness="0"
-                                                  Foreground="{Binding Foreground}"
+                                                  Foreground="{Binding Foreground,
+                                                                       RelativeSource={RelativeSource TemplatedParent}}"
                                                   SelectionMode="Single">
                                             <ListView.ItemContainerStyle>
                                                 <Style TargetType="ListViewItem">
@@ -314,8 +321,8 @@
                                                                 <Rectangle x:Name="SelectionOverlay"
                                                                            HorizontalAlignment="Stretch"
                                                                            VerticalAlignment="Stretch"
-                                                                           Fill="{DynamicResource {ComponentResourceKey TypeInTargetAssembly=ui:RibbonWindow,
-                                                                                                                        ResourceId=WindowAccentBrush}}"
+                                                                           Fill="{Binding BorderBrush,
+                                                                                          Source={x:Reference PopupContent}}"
                                                                            Opacity=".2"
                                                                            StrokeThickness="0"
                                                                            Visibility="{Binding IsSelected,
@@ -324,8 +331,8 @@
                                                                            HorizontalAlignment="Stretch"
                                                                            VerticalAlignment="Stretch"
                                                                            Fill="Transparent"
-                                                                           Stroke="{DynamicResource {ComponentResourceKey TypeInTargetAssembly=ui:RibbonWindow,
-                                                                                                                          ResourceId=WindowAccentBrush}}"
+                                                                           Stroke="{Binding BorderBrush,
+                                                                                            Source={x:Reference PopupContent}}"
                                                                            StrokeThickness="1"
                                                                            Visibility="{Binding IsSelected,
                                                                                                 Converter={StaticResource BooleanToVisibilityConverter}}" />

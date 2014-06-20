@@ -39,6 +39,7 @@ namespace Crystalbyte.UI {
         private Border _ribbonHost;
         private StatusBar _statusBar;
         private Grid _appMenuHost;
+        private ContentPresenter _contentPresenter;
         private Popup _ribbonOptionsPopup;
         private ListView _ribbonOptionsList;
         private HwndSource _hwndSource;
@@ -54,7 +55,7 @@ namespace Crystalbyte.UI {
         public const string ApplicationMenuHostName = "PART_ApplicationMenuHost";
         public const string RibbonOptionsListName = "PART_RibbonOptionsList";
         public const string RibbonOptionsPopupName = "PART_RibbonOptionsPopup";
-
+        public const string ContentPresenterName = "PART_ContentPresenter";
 
         #endregion
 
@@ -275,11 +276,13 @@ namespace Crystalbyte.UI {
 
         private void OnOpenAppMenu(object sender, ExecutedRoutedEventArgs e) {
             IsAppMenuOpened = true;
+            _contentPresenter.Visibility = Visibility.Collapsed;
             _ribbonHost.BlendOut();
             _appMenu.MoveFocus(new TraversalRequest(FocusNavigationDirection.First));
         }
 
         private void OnCloseAppMenu(object sender, ExecutedRoutedEventArgs e) {
+            _contentPresenter.Visibility = Visibility.Visible;
             IsAppMenuOpened = false;
         }
 
@@ -441,6 +444,8 @@ namespace Crystalbyte.UI {
             // Should be called first
             // See http://msdn.microsoft.com/en-us/library/system.windows.frameworkelement.onapplytemplate(v=vs.110).aspx
             base.OnApplyTemplate();
+
+            _contentPresenter = (ContentPresenter)Template.FindName(ContentPresenterName, this);
 
             _ribbonHost = (Border)Template.FindName(RibbonHostName, this);
             _statusBar = (StatusBar)Template.FindName(StatusBarName, this);

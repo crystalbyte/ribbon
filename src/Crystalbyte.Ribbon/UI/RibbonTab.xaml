@@ -9,6 +9,7 @@
 
     <Style TargetType="ui:RibbonTab">
         <Setter Property="BorderThickness" Value="1,1,1,0" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="Background" Value="{Binding Background, RelativeSource={RelativeSource FindAncestor, AncestorType=ui:RibbonWindow, AncestorLevel=1}}" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -32,7 +33,6 @@
                                    VerticalAlignment="Stretch"
                                    Fill="{TemplateBinding ContextualBrush}"
                                    RenderOptions.EdgeMode="Aliased"
-                                   SnapsToDevicePixels="True"
                                    StrokeThickness="0"
                                    Visibility="{Binding IsContextual,
                                                         RelativeSource={RelativeSource TemplatedParent},
@@ -42,7 +42,6 @@
                                    Fill="{TemplateBinding Background}"
                                    Opacity=".8"
                                    RenderOptions.EdgeMode="Aliased"
-                                   SnapsToDevicePixels="True"
                                    StrokeThickness="0"
                                    Visibility="{Binding IsContextual,
                                                         RelativeSource={RelativeSource TemplatedParent},
@@ -55,15 +54,22 @@
                                    Visibility="{Binding IsContextual,
                                                         RelativeSource={RelativeSource TemplatedParent},
                                                         Converter={StaticResource BooleanToVisibilityConverter}}" />
-                        <Grid x:Name="TabHeaderBackground"
-                              Background="Transparent"
-                              SnapsToDevicePixels="True">
+                        <Grid x:Name="TabHeaderBackground" Background="Transparent">
                             <Border x:Name="SelectionBorder"
                                     Background="Transparent"
                                     BorderBrush="{TemplateBinding BorderBrush}"
                                     BorderThickness="{TemplateBinding BorderThickness}"
                                     Visibility="{TemplateBinding IsSelected,
                                                                  Converter={StaticResource BooleanToVisibilityConverter}}" />
+                            <Rectangle x:Name="LowerBorderOverlay"
+                                       Margin="1,1,1,-1"
+                                       Fill="{Binding Background,
+                                                      RelativeSource={RelativeSource FindAncestor,
+                                                                                     AncestorType=ui:RibbonTab,
+                                                                                     AncestorLevel=1}}"
+                                       RenderOptions.EdgeMode="Aliased"
+                                       Visibility="{TemplateBinding IsSelected,
+                                                                    Converter={StaticResource BooleanToVisibilityConverter}}" />
                             <Border x:Name="NoSelectionBorder"
                                     Background="Transparent"
                                     BorderBrush="{Binding BorderBrush,
@@ -88,7 +94,7 @@
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsSelected" Value="False">
-                            <Setter TargetName="NoSelectionBorder" Property="BorderThickness" Value="0,0,0,1" />
+                            <Setter TargetName="NoSelectionBorder" Property="BorderThickness" Value="0,0,0,0" />
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
                             <Setter TargetName="TabHeaderBackground" Property="Background" Value="{Binding Background, RelativeSource={RelativeSource FindAncestor, AncestorType=ui:RibbonTab, AncestorLevel=1}}" />
