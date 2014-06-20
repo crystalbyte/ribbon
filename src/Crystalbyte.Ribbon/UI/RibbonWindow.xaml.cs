@@ -301,16 +301,20 @@ namespace Crystalbyte.UI {
             window.SyncRibbonOptionsSelection();
         }
 
-        private void OnRemoveQuickAccess(object sender, ExecutedRoutedEventArgs e) {
-            if (e.Parameter is IQuickAccessConform) {
-                QuickAccessItems.Remove(e.Parameter as IQuickAccessConform);
-            }
+        private async void OnRemoveQuickAccess(object sender, ExecutedRoutedEventArgs e) {
+            if (!(e.Parameter is IQuickAccessConform)) 
+                return;
+
+            QuickAccessItems.Remove(e.Parameter as IQuickAccessConform);
+            await StoreStateAsync();
         }
 
-        private void OnAddQuickAccess(object sender, ExecutedRoutedEventArgs e) {
-            if (e.Parameter is IQuickAccessConform) {
-                QuickAccessItems.Add(e.Parameter as IQuickAccessConform);
-            }
+        private async void OnAddQuickAccess(object sender, ExecutedRoutedEventArgs e) {
+            if (!(e.Parameter is IQuickAccessConform)) 
+                return;
+
+            QuickAccessItems.Add(e.Parameter as IQuickAccessConform);
+            await StoreStateAsync();
         }
 
         private void OnRibbonSelectionChanged(object sender, SelectionChangedEventArgs e) {
@@ -425,11 +429,6 @@ namespace Crystalbyte.UI {
         #endregion
 
         #region Class Overrides
-
-        protected async override void OnClosed(EventArgs e) {
-            base.OnClosed(e);
-            await StoreStateAsync();
-        }
 
         protected override void OnStateChanged(EventArgs e) {
             base.OnStateChanged(e);
