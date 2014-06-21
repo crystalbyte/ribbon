@@ -1,6 +1,9 @@
 ﻿<Application x:Class="Crystalbyte.Ribbon.Demo.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:c="clr-namespace:Crystalbyte.Ribbon.Demo.Commands"
              StartupUri="MainWindow.xaml">
-    <Application.Resources />
+    <Application.Resources>
+        <c:DummyCommand x:Key="DummyCommand" />
+    </Application.Resources>
 </Application>

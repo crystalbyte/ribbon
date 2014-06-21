@@ -59,6 +59,7 @@
     <Compile Include="ChangeColorCommand.cs" />
     <Compile Include="ColorContext.cs" />
     <Compile Include="ColorItemsSource.cs" />
+    <Compile Include="Commands\DummyCommand.cs" />
     <Compile Include="Parts\EditRibbonTab.xaml.cs">
       <DependentUpon>EditRibbonTab.xaml</DependentUpon>
     </Compile>

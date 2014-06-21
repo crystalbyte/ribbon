@@ -306,7 +306,7 @@ namespace Crystalbyte.UI {
                 return;
 
             QuickAccessItems.Remove(e.Parameter as IQuickAccessConform);
-            await StoreStateAsync();
+            await StoreQuickAccessAsync();
         }
 
         private async void OnAddQuickAccess(object sender, ExecutedRoutedEventArgs e) {
@@ -314,7 +314,7 @@ namespace Crystalbyte.UI {
                 return;
 
             QuickAccessItems.Add(e.Parameter as IQuickAccessConform);
-            await StoreStateAsync();
+            await StoreQuickAccessAsync();
         }
 
         private void OnRibbonSelectionChanged(object sender, SelectionChangedEventArgs e) {
@@ -395,7 +395,7 @@ namespace Crystalbyte.UI {
 
         private void OnWindowLoaded(object sender, RoutedEventArgs e) {
             UpdateWindowStates();
-            RestoreState();
+            RestoreQuickAccess();
         }
 
         private void OnMinimize(object sender, ExecutedRoutedEventArgs e) {
@@ -523,7 +523,7 @@ namespace Crystalbyte.UI {
             story.Begin();
         }
 
-        private void RestoreState() {
+        private void RestoreQuickAccess() {
             const string name = "ribbon.xml";
             if (!File.Exists(name)) {
                 return;
@@ -545,7 +545,7 @@ namespace Crystalbyte.UI {
             }
         }
 
-        private async Task StoreStateAsync() {
+        private async Task StoreQuickAccessAsync() {
             var keys = new ArrayList(QuickAccessItems
                 .Where(x => x.Key != null)
                 .Select(x => x.Key)

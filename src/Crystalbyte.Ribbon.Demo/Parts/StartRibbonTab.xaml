@@ -10,12 +10,20 @@
               mc:Ignorable="d">
     <ui:RibbonPage>
         <ui:RibbonGroup Header="Navigation">
-            <ui:RibbonButton Content="Back" ImageSource="../Assets/back.png" />
-            <ui:RibbonButton Content="Next" ImageSource="../Assets/next.png" />
+            <ui:RibbonButton Command="{StaticResource DummyCommand}"
+                             Content="Back"
+                             ImageSource="../Assets/back.png" />
+            <ui:RibbonButton Command="{StaticResource DummyCommand}"
+                             Content="Next"
+                             ImageSource="../Assets/next.png" />
         </ui:RibbonGroup>
         <ui:RibbonGroup Header="Communications">
-            <ui:RibbonButton Content="Download" ImageSource="../Assets/download.png" />
-            <ui:RibbonButton Content="Upload" ImageSource="../Assets/upload.png" />
+            <ui:RibbonButton Command="{StaticResource DummyCommand}"
+                             Content="Download"
+                             ImageSource="../Assets/download.png" />
+            <ui:RibbonButton Command="{StaticResource DummyCommand}"
+                             Content="Upload"
+                             ImageSource="../Assets/upload.png" />
         </ui:RibbonGroup>
     </ui:RibbonPage>
 </ui:RibbonTab>

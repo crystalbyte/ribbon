@@ -10,8 +10,12 @@
               mc:Ignorable="d">
     <ui:RibbonPage>
         <ui:RibbonGroup Header="Actions">
-            <ui:RibbonButton Content="Add" ImageSource="../Assets/add.png" />
-            <ui:RibbonButton Content="Remove" ImageSource="../Assets/delete.png" />
+            <ui:RibbonButton Command="{StaticResource DummyCommand}"
+                             Content="Add"
+                             ImageSource="../Assets/add.png" />
+            <ui:RibbonButton Command="{StaticResource DummyCommand}"
+                             Content="Remove"
+                             ImageSource="../Assets/delete.png" />
         </ui:RibbonGroup>
     </ui:RibbonPage>
 </ui:RibbonTab>
