@@ -33,6 +33,8 @@ namespace Crystalbyte.UI {
             element.SetValue(Grid.RowSpanProperty, 1);
             element.SetValue(Panel.ZIndexProperty, 25);
             element.SetValue(FrameworkElement.VerticalAlignmentProperty, VerticalAlignment.Top);
+
+            //
             element.Visibility = Visibility.Visible;
         }
 

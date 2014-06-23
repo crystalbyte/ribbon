@@ -10,7 +10,7 @@
                  MinWidth="640"
                  MinHeight="400"
                  Foreground="WhiteSmoke"
-                 Icon="Assets/crystalbyte.cube.png"
+                 Icon="Assets/crystalbyte.claw.png"
                  UseLayoutRounding="True">
 
     <ui:RibbonWindow.ApplicationMenu>

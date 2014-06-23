@@ -302,7 +302,7 @@ namespace Crystalbyte.UI {
         }
 
         private async void OnRemoveQuickAccess(object sender, ExecutedRoutedEventArgs e) {
-            if (!(e.Parameter is IQuickAccessConform)) 
+            if (!(e.Parameter is IQuickAccessConform))
                 return;
 
             QuickAccessItems.Remove(e.Parameter as IQuickAccessConform);
@@ -310,7 +310,7 @@ namespace Crystalbyte.UI {
         }
 
         private async void OnAddQuickAccess(object sender, ExecutedRoutedEventArgs e) {
-            if (!(e.Parameter is IQuickAccessConform)) 
+            if (!(e.Parameter is IQuickAccessConform))
                 return;
 
             QuickAccessItems.Add(e.Parameter as IQuickAccessConform);

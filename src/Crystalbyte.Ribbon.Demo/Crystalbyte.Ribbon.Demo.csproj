@@ -60,8 +60,14 @@
     <Compile Include="ColorContext.cs" />
     <Compile Include="ColorItemsSource.cs" />
     <Compile Include="Commands\DummyCommand.cs" />
-    <Compile Include="Parts\EditRibbonTab.xaml.cs">
-      <DependentUpon>EditRibbonTab.xaml</DependentUpon>
+    <Compile Include="Parts\ArchitectureTab.xaml.cs">
+      <DependentUpon>ArchitectureTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Parts\ProjectRibbonTab.xaml.cs">
+      <DependentUpon>ProjectRibbonTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Parts\ImageTab.xaml.cs">
+      <DependentUpon>ImageTab.xaml</DependentUpon>
     </Compile>
     <Compile Include="Parts\StartRibbonTab.xaml.cs">
       <DependentUpon>StartRibbonTab.xaml</DependentUpon>
@@ -83,7 +89,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Parts\EditRibbonTab.xaml">
+    <Page Include="Parts\ArchitectureTab.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Parts\ProjectRibbonTab.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Parts\ImageTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -134,7 +148,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\crystalbyte.cube.png" />
+    <Resource Include="Assets\crystalbyte.claw.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\favs.png" />

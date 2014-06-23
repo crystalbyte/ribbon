@@ -17,8 +17,8 @@ namespace Crystalbyte.Ribbon.Demo.Parts {
     /// <summary>
     /// Interaction logic for EditRibbonTab.xaml
     /// </summary>
-    public partial class EditRibbonTab  {
-        public EditRibbonTab() {
+    public partial class ProjectRibbonTab  {
+        public ProjectRibbonTab() {
             InitializeComponent();
         }
     }
