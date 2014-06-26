@@ -231,6 +231,15 @@ namespace Crystalbyte.UI {
         public static readonly DependencyProperty AccentBrushProperty =
             DependencyProperty.Register("AccentBrush", typeof(Brush), typeof(RibbonWindow), new PropertyMetadata(null));
 
+        public Brush HoverBrush {
+            get { return (Brush)GetValue(HoverBrushProperty); }
+            set { SetValue(HoverBrushProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for HoverBrush.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty HoverBrushProperty =
+            DependencyProperty.Register("HoverBrush", typeof(Brush), typeof(RibbonWindow), new PropertyMetadata(null));
+
         #endregion
 
         #region Event Handlers
@@ -275,6 +284,10 @@ namespace Crystalbyte.UI {
         }
 
         private void OnOpenAppMenu(object sender, ExecutedRoutedEventArgs e) {
+            if (_appMenu == null) {
+                return;
+            }
+
             IsAppMenuOpened = true;
             _contentPresenter.Visibility = Visibility.Collapsed;
             _ribbonHost.BlendOut();
@@ -333,12 +346,20 @@ namespace Crystalbyte.UI {
         }
 
         private void OnBlendInRibbon(object sender, ExecutedRoutedEventArgs e) {
+            if (_ribbon == null || _ribbonHost == null) {
+                return;
+            }
+
             _ribbon.RestoreSelection();
             _ribbonHost.BlendIn();
             _statusBar.BlendIn();
         }
 
         private void OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            if (_ribbon == null || _ribbonHost == null) {
+                return;
+            }
+
             var point = e.GetPosition(sender as IInputElement);
             if (RibbonState == RibbonState.TabsAndCommands) {
                 return;
@@ -583,6 +604,10 @@ namespace Crystalbyte.UI {
         }
 
         private void UpdateRibbonBehavior() {
+            if (_ribbon == null || _statusBar == null || _ribbonHost == null) {
+                return;
+            }
+
             switch (RibbonState) {
                 case RibbonState.Tabs:
                     _ribbon.IsCommandStripVisible = false;
@@ -613,6 +638,10 @@ namespace Crystalbyte.UI {
         }
 
         private void SyncRibbonOptionsSelection() {
+            if (_ribbonOptionsList == null) {
+                return;
+            }
+
             var option = _ribbonOptionsList.Items
                 .OfType<RibbonOption>()
                 .First(x => x.Visibility == RibbonState);

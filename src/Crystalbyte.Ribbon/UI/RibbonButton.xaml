@@ -87,7 +87,7 @@
                     <Condition Property="IsMouseOver" Value="True" />
                     <Condition Property="IsPressed" Value="False" />
                 </MultiTrigger.Conditions>
-                <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly=ui:RibbonWindow, ResourceId=WindowButtonHoverBrush}}" />
+                <Setter Property="Background" Value="{Binding HoverBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=ui:RibbonWindow, AncestorLevel=1}}" />
             </MultiTrigger>
         </Style.Triggers>
     </Style>

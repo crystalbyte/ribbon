@@ -14,7 +14,7 @@
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Margin" Value="1,0,1,0" />
-        <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly=ui:RibbonWindow, ResourceId=RibbonBackgroundBrush}}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly=ui:RibbonWindow, ResourceId=RibbonBorderBrush}}" />
         <Setter Property="HeaderTemplate">
             <Setter.Value>
                 <DataTemplate>
@@ -29,19 +29,21 @@
             <Setter.Value>
                 <ControlTemplate TargetType="ui:RibbonTab">
                     <Grid Background="{x:Null}">
-                        <Rectangle Margin="0,-23,0,0"
+                        <Rectangle Margin="0,-23,0,1"
                                    VerticalAlignment="Stretch"
                                    Fill="{TemplateBinding ContextualBrush}"
                                    RenderOptions.EdgeMode="Aliased"
+                                   SnapsToDevicePixels="True"
                                    StrokeThickness="0"
                                    Visibility="{Binding IsContextual,
                                                         RelativeSource={RelativeSource TemplatedParent},
                                                         Converter={StaticResource BooleanToVisibilityConverter}}" />
-                        <Rectangle Margin="0,-19,0,0"
+                        <Rectangle Margin="0,-19,0,1"
                                    VerticalAlignment="Stretch"
                                    Fill="{TemplateBinding Background}"
                                    Opacity=".8"
                                    RenderOptions.EdgeMode="Aliased"
+                                   SnapsToDevicePixels="True"
                                    StrokeThickness="0"
                                    Visibility="{Binding IsContextual,
                                                         RelativeSource={RelativeSource TemplatedParent},

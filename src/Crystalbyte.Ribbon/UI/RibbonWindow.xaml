@@ -21,8 +21,10 @@
     </Style>
 
     <Style TargetType="ui:RibbonWindow">
+        <Setter Property="HoverBrush" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly=ui:RibbonWindow, ResourceId=WindowButtonHoverBrush}}" />
         <Setter Property="AccentBrush" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly=ui:RibbonWindow, ResourceId=WindowAccentBrush}}" />
         <Setter Property="AllowsTransparency" Value="True" />
+        <Setter Property="RibbonState" Value="TabsAndCommands" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="WindowStyle" Value="None" />
         <Setter Property="ResizeMode" Value="CanResizeWithGrip" />
