@@ -9,11 +9,17 @@ using System.Windows;
 
 #endregion
 
-[assembly: AssemblyTitle("Crystalbyte.Ribbon")]
-[assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Crystalbyte.Ribbon")]
+[assembly: AssemblyTitle("Crystalbyte Ribbon")]
+[assembly: AssemblyDescription("This assembly contains ribbon controls for WPF")]
+
+#if DEBUG
+[assembly: AssemblyConfiguration("Debug")]
+#else
+[assembly: AssemblyConfiguration("Release")]
+#endif
+
+[assembly: AssemblyCompany("Crystalbyte")]
+[assembly: AssemblyProduct("Crystalbyte Ribbon Controls for WPF")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
