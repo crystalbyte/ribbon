@@ -32,7 +32,7 @@
             </Setter.Value>
         </Setter>
         <Setter Property="MaxWidth" Value="100" />
-        <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly=ui:RibbonWindow, ResourceId=LightTextBrush}}" />
+        <Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=ui:RibbonWindow, AncestorLevel=1}}" />
         <Setter Property="ContentTemplate">
             <Setter.Value>
                 <DataTemplate>

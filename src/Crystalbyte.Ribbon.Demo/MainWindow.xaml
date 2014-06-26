@@ -10,14 +10,12 @@
                  MinWidth="640"
                  MinHeight="400"
                  Icon="Assets/crystalbyte.claw.png"
-                 UseLayoutRounding="True">
-
-
+                 UseLayoutRounding="True"
+                 WindowStartupLocation="CenterScreen">
 
     <ui:RibbonWindow.ApplicationMenu>
         <p:ApplicationMenu />
     </ui:RibbonWindow.ApplicationMenu>
-
 
     <ui:RibbonWindow.Ribbon>
         <p:Ribbon />
@@ -26,7 +24,6 @@
     <ui:RibbonWindow.StatusBarItemsSource>
         <p:StatusBarItemsSource />
     </ui:RibbonWindow.StatusBarItemsSource>
-
 
     <Border Padding="20">
         <ScrollViewer>
@@ -138,4 +135,5 @@
             </StackPanel>
         </ScrollViewer>
     </Border>
+
 </ui:RibbonWindow>
