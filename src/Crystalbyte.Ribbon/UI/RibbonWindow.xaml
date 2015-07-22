@@ -67,13 +67,13 @@
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <!--  window command bar  -->
-                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="26" />
                                     <!--  window ribbon  -->
-                                    <RowDefinition Height="Auto" MinHeight="25" />
+                                    <RowDefinition Height="Auto" MinHeight="26" />
                                     <!--  window content  -->
                                     <RowDefinition Height="*" />
                                     <!--  status bar  -->
-                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" MinHeight="24" />
                                 </Grid.RowDefinitions>
 
                                 <Grid x:Name="CommandBar"
@@ -90,9 +90,9 @@
                                     <Grid.ColumnDefinitions>
                                         <!--  window icon  -->
                                         <ColumnDefinition Width="Auto" />
-                                        <!--  window title  -->
+                                        <!--  quick access bar -->
                                         <ColumnDefinition Width="Auto" />
-                                        <!--  empty command space  -->
+                                        <!--  window title  -->
                                         <ColumnDefinition Width="*" />
                                         <!--  help button  -->
                                         <ColumnDefinition Width="Auto" />
@@ -108,8 +108,9 @@
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
                                     <Image Grid.Column="0"
-                                           Height="20"
-                                           Margin="8"
+                                           Height="16"
+                                           Margin="6,0"
+                                           VerticalAlignment="Center"
                                            RenderOptions.BitmapScalingMode="Fant"
                                            Source="{TemplateBinding Icon}"
                                            Stretch="Uniform"
@@ -121,14 +122,14 @@
                                                                 ConverterParameter=Tabs|TabsAndCommands}" />
                                     <Button Grid.Column="0"
                                             Grid.ColumnSpan="3"
+                                            Margin="4,0"
                                             Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly=ui:RibbonWindow,
                                                                                           ResourceId=BlendInRibbonButtonStyle}}"
                                             Visibility="{Binding RibbonState,
                                                                  RelativeSource={RelativeSource TemplatedParent},
                                                                  Converter={StaticResource RibbonStateToVisibilityConverter},
                                                                  ConverterParameter=Hidden}" />
-                                    <TextBlock Grid.Column="1"
-                                               Margin="0,-3,0,0"
+                                    <TextBlock Grid.Column="2"
                                                VerticalAlignment="Center"
                                                Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly=ui:RibbonWindow,
                                                                                              ResourceId=WindowTitleStyle}}"
@@ -139,13 +140,11 @@
                                                                                                    AncestorLevel=1},
                                                                     Converter={StaticResource RibbonStateToVisibilityConverter},
                                                                     ConverterParameter=Tabs|TabsAndCommands}" />
-                                    <Border Grid.Column="2"
-                                            Margin="8,0,0,0"
+                                    <Border Grid.Column="1"
+                                            Margin="0,0,8,0"
                                             VerticalAlignment="Center"
                                             BorderBrush="{DynamicResource {ComponentResourceKey TypeInTargetAssembly=ui:RibbonWindow,
                                                                                                 ResourceId=RibbonBorderBrush}}"
-                                            BorderThickness="1,0,0,0"
-                                            Padding="8,0,0,0"
                                             Visibility="{Binding RibbonState,
                                                                  RelativeSource={RelativeSource FindAncestor,
                                                                                                 AncestorType=ui:RibbonWindow,

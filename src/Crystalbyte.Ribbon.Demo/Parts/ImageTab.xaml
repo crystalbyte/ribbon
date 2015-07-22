@@ -5,7 +5,7 @@
               xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
               xmlns:ui="clr-namespace:Crystalbyte.UI;assembly=Crystalbyte.Ribbon"
               ContextualBrush="Chocolate"
-              ContextualText="ImageTools"
+              ContextualText="IMAGE TOOLS"
               Header="IMAGE"
               IsContextual="True"
               d:DesignHeight="300"

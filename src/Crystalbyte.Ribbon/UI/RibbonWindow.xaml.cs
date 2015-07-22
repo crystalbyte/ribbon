@@ -7,7 +7,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Security;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -152,6 +151,24 @@ namespace Crystalbyte.UI {
             get { return (bool)GetValue(IsNormalizedProperty); }
             set { SetValue(IsNormalizedProperty, value); }
         }
+
+        public Thickness ActualFramePadding {
+            get { return (Thickness)GetValue(ActualFramePaddingProperty); }
+            set { SetValue(ActualFramePaddingProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ActualFramePadding.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ActualFramePaddingProperty =
+            DependencyProperty.Register("ActualFramePadding", typeof(Thickness), typeof(RibbonWindow), new PropertyMetadata(new Thickness(0)));
+
+        public Thickness ActualBorderThickness {
+            get { return (Thickness)GetValue(ActualBorderThicknessProperty); }
+            set { SetValue(ActualBorderThicknessProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ActualBorderThickness.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ActualBorderThicknessProperty =
+            DependencyProperty.Register("ActualBorderThickness", typeof(Thickness), typeof(RibbonWindow), new PropertyMetadata(new Thickness(0)));
 
         // Using a DependencyProperty as the backing store for QuickAccessCommands.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty IsNormalizedProperty =
@@ -301,8 +318,9 @@ namespace Crystalbyte.UI {
 
         private static void OnRibbonChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
             var window = (RibbonWindow)d;
-            if (e.OldValue is Ribbon) {
-                window.DetachRibbon(e.OldValue as Ribbon);
+            var ribbon = e.OldValue as Ribbon;
+            if (ribbon != null) {
+                window.DetachRibbon(ribbon);
             }
             window.AttachRibbon(e.NewValue as Ribbon);
         }
@@ -318,7 +336,7 @@ namespace Crystalbyte.UI {
             if (!(e.Parameter is IQuickAccessConform))
                 return;
 
-            QuickAccessItems.Remove(e.Parameter as IQuickAccessConform);
+            QuickAccessItems.Remove((IQuickAccessConform)e.Parameter);
             await StoreQuickAccessAsync();
         }
 
@@ -326,7 +344,7 @@ namespace Crystalbyte.UI {
             if (!(e.Parameter is IQuickAccessConform))
                 return;
 
-            QuickAccessItems.Add(e.Parameter as IQuickAccessConform);
+            QuickAccessItems.Add((IQuickAccessConform)e.Parameter);
             await StoreQuickAccessAsync();
         }
 
@@ -416,6 +434,7 @@ namespace Crystalbyte.UI {
 
         private void OnWindowLoaded(object sender, RoutedEventArgs e) {
             UpdateWindowStates();
+            UpdateFrameBorder();
             RestoreQuickAccess();
         }
 
@@ -451,13 +470,26 @@ namespace Crystalbyte.UI {
 
         #region Class Overrides
 
+        protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e) {
+            base.OnPropertyChanged(e);
+
+            if (e.Property == BorderThicknessProperty) {
+                ActualBorderThickness = (Thickness)e.NewValue;
+            }
+        }
+
+        private void UpdateFrameBorder() {
+            ActualBorderThickness = IsMaximized ? new Thickness(0) : BorderThickness;
+            ActualFramePadding = IsMaximized ? new Thickness(0) : FramePadding;
+        }
+
         protected override void OnStateChanged(EventArgs e) {
             base.OnStateChanged(e);
             if (WindowState != WindowState.Maximized && RibbonState == RibbonState.Hidden) {
                 RibbonState = DefaultState;
             }
             UpdateWindowStates();
-            UpdateWindowBounds();
+            UpdateFrameBorder();
         }
 
         public override void OnApplyTemplate() {
@@ -538,6 +570,26 @@ namespace Crystalbyte.UI {
         #endregion
 
         #region Methods
+
+        private bool Minimize() {
+            WindowState = WindowState.Minimized;
+            return true;
+        }
+
+        private bool Maximize() {
+            WindowState = WindowState.Maximized;
+            return true;
+        }
+
+        private bool Restore() {
+            WindowState = WindowState.Normal;
+            return true;
+        }
+
+        private void UpdateWindowStates() {
+            IsNormalized = WindowState == WindowState.Normal;
+            IsMaximized = WindowState == WindowState.Maximized;
+        }
 
         private void RunExchangeAnimation() {
             var story = (Storyboard)_appMenuHost.FindResource("ExchangeAppMenuContentStoryboard");
@@ -649,11 +701,6 @@ namespace Crystalbyte.UI {
             option.IsSelected = true;
         }
 
-        private void UpdateWindowStates() {
-            IsNormalized = WindowState == WindowState.Normal;
-            IsMaximized = WindowState == WindowState.Maximized;
-        }
-
         #endregion
 
         #region Native Window Support
@@ -663,68 +710,145 @@ namespace Crystalbyte.UI {
         // ReSharper disable FieldCanBeMadeReadOnly.Local
         // ReSharper disable MemberCanBePrivate.Local
 
-        const int MONITOR_DEFAULTTONEAREST = 2;
-        const int WINDOWPOSCHANGING = 0x0046;
+        private const int MONITOR_DEFAULTTONEAREST = 0x00000002;
+        private const int WM_WINDOWPOSCHANGING = 0x0046;
+        private const int WM_GETMINMAXINFO = 0x0024;
+        private const int WM_SYSCOMMAND = 0x0112;
+        private const int SC_MINIMIZE = 0xF020;
+        private const int SC_MAXIMIZE = 0xF030;
+        private const int SC_RESTORE = 0xF120;
+        private const int SWP_NOMOVE = 0x0002;
 
-        private void UpdateWindowBounds() {
-            if (WindowState == WindowState.Normal) {
-                BorderThickness = new Thickness(1);
-                FramePadding = new Thickness(0);
-                return;
+        private IntPtr WindowProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled) {
+            switch (msg) {
+                case WM_GETMINMAXINFO:
+                    WmGetMinMaxInfo(hwnd, lParam);
+                    handled = true;
+                    break;
+                case WM_WINDOWPOSCHANGING:
+                    handled = WmPositionChanging(lParam);
+                    break;
+                case WM_SYSCOMMAND:
+                    if (wParam.ToInt32() == SC_MINIMIZE) {
+                        handled = Minimize();
+                        break;
+                    }
+
+                    if (wParam.ToInt32() == SC_MAXIMIZE) {
+                        handled = Maximize();
+                        break;
+                    }
+
+                    if (wParam.ToInt32() == SC_RESTORE) {
+                        handled = Restore();
+                    }
+
+                    break;
             }
 
-            var monitor = SafeNativeMethods.MonitorFromWindow(_hwndSource.Handle, MONITOR_DEFAULTTONEAREST);
-            var info = new MONITORINFOEX { cbSize = Marshal.SizeOf(typeof(MONITORINFOEX)) };
-            SafeNativeMethods.GetMonitorInfo(new HandleRef(this, monitor), ref info);
-
-            if (_hwndSource.CompositionTarget == null) {
-                throw new NullReferenceException("_hwndSource.CompositionTarget == null");
-            }
-
-            // All points queried from the Win32 API are not DPI aware.
-            // Since WPF is DPI aware, one WPF pixel does not necessarily correspond to a device pixel.
-            // In order to convert device pixels (Win32 API) into screen independent pixels (WPF), 
-            // the following transformation must be applied to points queried using the Win32 API.
-            var matrix = _hwndSource.CompositionTarget.TransformFromDevice;
-
-            // Not DPI aware
-            var workingArea = info.rcWork;
-            var monitorRect = info.rcMonitor;
-
-            // DPI aware
-            var bounds = matrix.Transform(new Point(workingArea.right - workingArea.left,
-                    workingArea.bottom - workingArea.top));
-
-            // DPI aware
-            var origin = matrix.Transform(new Point(workingArea.left, workingArea.top))
-                - matrix.Transform(new Point(monitorRect.left, monitorRect.top));
-
-            // Calulates the offset required to adjust the anchor position for the missing client frame border.
-            // An additional -1 must be added to the top to perfectly fit the screen, reason is of yet unknown.
-            var left = SystemParameters.WindowNonClientFrameThickness.Left
-                + SystemParameters.ResizeFrameVerticalBorderWidth + origin.X;
-            var top = SystemParameters.WindowNonClientFrameThickness.Top
-                + SystemParameters.ResizeFrameHorizontalBorderHeight
-                - SystemParameters.CaptionHeight + origin.Y - 1;
-
-            FramePadding = new Thickness(left, top, 0, 0);
-            MaxWidth = bounds.X + SystemParameters.ResizeFrameVerticalBorderWidth + SystemParameters.WindowNonClientFrameThickness.Right;
-            MaxHeight = bounds.Y + SystemParameters.ResizeFrameHorizontalBorderHeight + SystemParameters.WindowNonClientFrameThickness.Bottom;
-            BorderThickness = new Thickness(0);
+            return IntPtr.Zero;
         }
 
-        [SuppressUnmanagedCodeSecurity]
-        private static class SafeNativeMethods {
+        private bool WmPositionChanging(IntPtr lParam) {
+            var target = _hwndSource.CompositionTarget;
+            if (target == null) {
+                return false;
+            }
+
+            var matrix = target.TransformToDevice;
+            var minWidth = Convert.ToInt32(matrix.Transform(new Point(MinWidth, 0)).X);
+            var minHeight = Convert.ToInt32(matrix.Transform(new Point(0, MinHeight)).Y);
+
+            var pos = (WINDOWPOS)Marshal.PtrToStructure(lParam, typeof(WINDOWPOS));
+            if ((pos.flags & SWP_NOMOVE) != 0) {
+                return false;
+            }
+
+            var isAdjusted = false;
+            if (pos.cx < minWidth) {
+                pos.cx = minWidth;
+                isAdjusted = true;
+            }
+            if (pos.cy < minHeight) {
+                pos.cy = minHeight;
+                isAdjusted = true;
+            }
+
+            if (!isAdjusted) {
+                return false;
+            }
+
+            Marshal.StructureToPtr(pos, lParam, true);
+            return true;
+        }
+
+        private static void WmGetMinMaxInfo(IntPtr hwnd, IntPtr lParam) {
+            var mmi = (MINMAXINFO)Marshal.PtrToStructure(lParam, typeof(MINMAXINFO));
+
+            // Adjust the maximized size and position to fit the work area of the correct monitor
+
+            var monitor = NativeMethods.MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST);
+
+            if (monitor != IntPtr.Zero) {
+                var monitorInfo = new MONITORINFOEX {
+                    cbSize = Marshal.SizeOf(typeof(MONITORINFOEX))
+                };
+
+                NativeMethods.GetMonitorInfo(monitor, ref monitorInfo);
+                var rcWorkArea = monitorInfo.rcWork;
+                var rcMonitorArea = monitorInfo.rcMonitor;
+
+                mmi.ptMaxPosition.x = Math.Abs(rcWorkArea.left - rcMonitorArea.left);
+                mmi.ptMaxPosition.y = Math.Abs(rcWorkArea.top - rcMonitorArea.top);
+                mmi.ptMaxSize.x = Math.Abs(rcWorkArea.right - rcWorkArea.left);
+                mmi.ptMaxSize.y = Math.Abs(rcWorkArea.bottom - rcWorkArea.top);
+            }
+
+            Marshal.StructureToPtr(mmi, lParam, true);
+        }
+
+        private static class NativeMethods {
             // To get a handle to the specified monitor
             [DllImport("user32.dll")]
             public static extern IntPtr MonitorFromWindow(IntPtr hwnd, int dwFlags);
 
             [DllImport("user32.dll")]
-            public static extern bool GetMonitorInfo(HandleRef hmonitor, ref MONITORINFOEX monitorInfo);
+            public static extern bool GetMonitorInfo(IntPtr hmonitor, ref MONITORINFOEX monitorInfo);
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public struct RECT {
+        private struct WINDOWPOS {
+            public IntPtr hwnd;
+            public IntPtr hwndInsertAfter;
+            public int x;
+            public int y;
+            public int cx;
+            public int cy;
+            public int flags;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct POINT {
+            public int x;
+            public int y;
+
+            public POINT(int x, int y) {
+                this.x = x;
+                this.y = y;
+            }
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct MINMAXINFO {
+            public POINT ptReserved;
+            public POINT ptMaxSize;
+            public POINT ptMaxPosition;
+            public POINT ptMinTrackSize;
+            public POINT ptMaxTrackSize;
+        };
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct RECT {
             public int left;
             public int top;
             public int right;
@@ -732,7 +856,7 @@ namespace Crystalbyte.UI {
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public struct MONITORINFOEX {
+        private struct MONITORINFOEX {
             public int cbSize;
             public RECT rcMonitor; // Total area
             public RECT rcWork; // Working area

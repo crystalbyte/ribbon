@@ -91,7 +91,9 @@
     <Thickness x:Key="{ComponentResourceKey TypeInTargetAssembly=ui:RibbonWindow, ResourceId=HeaderPadding}">12,4,12,4</Thickness>
 
     <Style x:Key="{ComponentResourceKey TypeInTargetAssembly=ui:RibbonWindow, ResourceId=WindowTitleStyle}" TargetType="TextBlock">
-        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly=ui:RibbonWindow, ResourceId=WindowBackgroundBrush}}" />
     </Style>
 
     <Style x:Key="WindowButtonStyle" TargetType="ButtonBase">
@@ -329,8 +331,8 @@
                                         ResourceId=QuickAccessButtonStyle}"
            BasedOn="{StaticResource WindowButtonStyle}"
            TargetType="ButtonBase">
-        <Setter Property="Height" Value="20" />
-        <Setter Property="Width" Value="20" />
+        <Setter Property="Height" Value="21" />
+        <Setter Property="Width" Value="21" />
     </Style>
 
 </ResourceDictionary>
