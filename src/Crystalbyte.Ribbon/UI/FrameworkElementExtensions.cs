@@ -7,7 +7,7 @@ namespace Crystalbyte.UI {
         public static void BlendIn(this FrameworkElement element) {
             element.SetValue(Ribbon.IsFloatingProperty, true);
             element.SetValue(Grid.RowProperty, 0);
-            element.SetValue(Grid.RowSpanProperty, 2);
+            element.SetValue(Grid.RowSpanProperty, 3);
             element.SetValue(Panel.ZIndexProperty, 1000);
             element.SetValue(FrameworkElement.VerticalAlignmentProperty, VerticalAlignment.Top);
             element.Visibility = Visibility.Visible;

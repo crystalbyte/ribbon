@@ -45,10 +45,10 @@
     </Style>
 
     <Style TargetType="ui:Ribbon">
-        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="UseLayoutRounding" Value="True" />
         <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="Padding" Value="1" />
-        <Setter Property="BorderThickness" Value="0,1,0,1.1" />
+        <Setter Property="BorderThickness" Value="0,1,0,1" />
         <Setter Property="Background" Value="{Binding Background, RelativeSource={RelativeSource FindAncestor, AncestorType=ui:RibbonWindow, AncestorLevel=1}}" />
         <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly=ui:RibbonWindow, ResourceId=RibbonBorderBrush}}" />
         <Setter Property="AppMenuText" Value="{x:Static properties:Resources.OpenAppMenuHeader}" />
@@ -62,11 +62,10 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ui:Ribbon">
-                    <Grid Background="{TemplateBinding Background}"
-                          KeyboardNavigation.TabNavigation="Local"
+                    <Grid KeyboardNavigation.TabNavigation="Local"
                           SnapsToDevicePixels="True">
                         <Grid.RowDefinitions>
-                            <!--  Redundant window command bar  -->
+                            <!--  window command bar  -->
                             <RowDefinition Height="Auto" />
                             <!--  Ribbon tab bar  -->
                             <RowDefinition Height="Auto" />
@@ -78,6 +77,7 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <Grid Grid.Row="0"
+                              Background="{TemplateBinding Background}"
                               Grid.Column="0"
                               Grid.ColumnSpan="2"
                               Visibility="{Binding IsWindowCommandStripVisible,
@@ -95,33 +95,30 @@
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
                                 <Image Grid.Column="0"
-                                       Height="20"
-                                       Margin="8"
-                                       RenderOptions.BitmapScalingMode="Fant"
-                                       Source="{Binding Icon,
+                                           Height="16"
+                                           Margin="6,0"
+                                           VerticalAlignment="Center"
+                                           RenderOptions.BitmapScalingMode="Fant"
+                                           Source="{Binding Icon,
+                                                        RelativeSource={RelativeSource FindAncestor,
+                                                                                       AncestorType=ui:RibbonWindow}}"
+                                           Stretch="Uniform" />
+                                <TextBlock Grid.Column="2"
+                                               VerticalAlignment="Center"
+                                               Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly=ui:RibbonWindow,
+                                                                                             ResourceId=WindowTitleStyle}}"
+                                               Text="{Binding Title,
                                                         RelativeSource={RelativeSource FindAncestor,
                                                                                        AncestorType=ui:RibbonWindow,
-                                                                                       AncestorLevel=1}}"
-                                       Stretch="Uniform" />
-                                <TextBlock Grid.Column="1"
-                                           Margin="0,-3,0,0"
-                                           VerticalAlignment="Center"
-                                           Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly=ui:RibbonWindow,
-                                                                                         ResourceId=WindowTitleStyle}}"
-                                           Text="{Binding Title,
-                                                          RelativeSource={RelativeSource FindAncestor,
-                                                                                         AncestorType=ui:RibbonWindow,
-                                                                                         AncestorLevel=1}}" />
+                                                                                       AncestorLevel=1}}" />
 
-                                <Border Grid.Column="2"
-                                        Margin="8,0,0,0"
+                                <Border Grid.Column="1"
+                                        Margin="0,0,8,0"
                                         VerticalAlignment="Center"
                                         BorderBrush="{Binding BorderBrush,
                                                               RelativeSource={RelativeSource FindAncestor,
                                                                                              AncestorLevel=1,
-                                                                                             AncestorType=ui:RibbonWindow}}"
-                                        BorderThickness="1,0,0,0"
-                                        Padding="8,0,0,0">
+                                                                                             AncestorType=ui:RibbonWindow}}">
                                     <ui:QuickAccessBar VerticalAlignment="Center" ItemsSource="{Binding QuickAccessItems, RelativeSource={RelativeSource FindAncestor, AncestorType=ui:RibbonWindow, AncestorLevel=1}}" />
                                 </Border>
                                 <Button Grid.Column="3" Style="{DynamicResource {ComponentResourceKey TypeInTargetAssembly=ui:RibbonWindow, ResourceId=HelpButtonStyle}}" />
@@ -139,6 +136,7 @@
                             </Grid>
                         </Grid>
                         <Button Grid.Row="1"
+                                Background="{TemplateBinding Background}"
                                 Grid.Column="0"
                                 Panel.ZIndex="2"
                                 Command="ui:RibbonCommands.OpenAppMenu"
@@ -157,6 +155,7 @@
                             <Border x:Name="PART_RibbonCommandStrip"
                                     BorderBrush="{TemplateBinding BorderBrush}"
                                     BorderThickness="{TemplateBinding BorderThickness}"
+                                    Background="{TemplateBinding Background}"
                                     KeyboardNavigation.DirectionalNavigation="Contained"
                                     KeyboardNavigation.TabIndex="2"
                                     KeyboardNavigation.TabNavigation="Local"
@@ -190,7 +189,6 @@
                                 </Border.Resources>
                             </Border>
                         </Border>
-
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
